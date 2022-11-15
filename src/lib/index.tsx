@@ -8,6 +8,7 @@ type Props = {
   gap?: number;
   pause?: boolean;
   preChar?: string;
+  delay?: number;
 };
 
 type EachProps = {
@@ -18,9 +19,10 @@ type EachProps = {
   gap: number;
   pause: boolean;
   preChar: string;
+  delay: number;
 };
 
-const EachChars = memo(({ char, type, index, duration, gap, pause, preChar }: EachProps) => {
+const EachChars = memo(({ char, type, index, duration, gap, pause, preChar, delay }: EachProps) => {
   const [text, setText] = useState(preChar);
   const tweener = useMemo(() => {
     return new Tweener({});
@@ -31,6 +33,7 @@ const EachChars = memo(({ char, type, index, duration, gap, pause, preChar }: Ea
       from: { index: 0 },
       to: { index: 1 },
       duration: duration + index * gap,
+      delay,
       onUpdate: (offset: any) => {
         setText(offsetChar(char, offset.index, type));
       },
@@ -41,8 +44,6 @@ const EachChars = memo(({ char, type, index, duration, gap, pause, preChar }: Ea
   }, [char]);
 
   useEffect(() => {
-    console.log(pause);
-
     if (pause) tweener.stop();
     else tweener.play();
   }, [pause]);
@@ -51,7 +52,7 @@ const EachChars = memo(({ char, type, index, duration, gap, pause, preChar }: Ea
 });
 
 const CharTransition = memo(
-  ({ children, duration = 1000, gap = 0, pause = false, preChar = '　' }: Props) => {
+  ({ children, duration = 1000, gap = 0, pause = false, preChar = '　', delay = 0 }: Props) => {
     const [chars, setChars] = useState(children);
 
     useEffect(() => {
@@ -68,6 +69,7 @@ const CharTransition = memo(
               gap={gap}
               pause={pause}
               preChar={preChar}
+              delay={delay}
             />
           )),
         );

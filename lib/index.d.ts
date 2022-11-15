@@ -5,6 +5,7 @@ declare type Props = {
     gap?: number;
     pause?: boolean;
     preChar?: string;
+    delay?: number;
 };
-declare const CharTransition: import("react").MemoExoticComponent<({ children, duration, gap, pause, preChar }: Props) => JSX.Element>;
+declare const CharTransition: import("react").MemoExoticComponent<({ children, duration, gap, pause, preChar, delay }: Props) => JSX.Element>;
 export default CharTransition;

@@ -1,6 +1,6 @@
 {
   "name": "lesca-react-char-transition",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "easy way to transition char code",
   "main": "lib/index.js",
   "scripts": {
