@@ -1,7 +1,7 @@
 {
-  "name": "npm-base-package",
+  "name": "lesca-react-char-transition",
   "version": "0.0.1",
-  "description": "npm-base-package",
+  "description": "easy way to transition char code",
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development",
@@ -64,5 +64,8 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:jameshsu1125/npm-base-package.git"
+  },
+  "dependencies": {
+    "lesca-object-tweener": "^2.4.4"
   }
 }

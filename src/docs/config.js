@@ -1,4 +1,4 @@
 module.exports = {
-  name: 'lesca-',
-  description: '',
+  name: 'lesca-react-char-transition',
+  description: 'simple char code transition',
 };
