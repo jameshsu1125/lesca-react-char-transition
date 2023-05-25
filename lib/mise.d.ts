@@ -3,4 +3,4 @@ export declare enum Type {
     string = 1
 }
 export declare const isNumber: (str: string) => boolean;
-export declare const offsetChar: (char: string, offset: number | undefined, type: Type) => string;
+export declare const offsetChar: (char: string, offset: number | undefined, type: Type, tranCharList: string[]) => string;

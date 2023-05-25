@@ -1,6 +1,6 @@
-import { memo, useEffect, ReactNode, useState, useMemo } from 'react';
-import Tweener, { Bezier } from 'lesca-object-tweener';
-import { isNumber, offsetChar, Type } from './mise';
+import Tweener from 'lesca-object-tweener';
+import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
+import { Type, isNumber, offsetChar } from './mise';
 
 type Props = {
   children: ReactNode | string;
@@ -9,6 +9,7 @@ type Props = {
   pause?: boolean;
   preChar?: string;
   delay?: number;
+  list?: string[];
 };
 
 type EachProps = {
@@ -20,39 +21,50 @@ type EachProps = {
   pause: boolean;
   preChar: string;
   delay: number;
+  list: string[];
 };
 
-const EachChars = memo(({ char, type, index, duration, gap, pause, preChar, delay }: EachProps) => {
-  const [text, setText] = useState(preChar);
-  const tweener = useMemo(() => {
-    return new Tweener({});
-  }, []);
+const EachChars = memo(
+  ({ char, type, index, duration, gap, pause, preChar, delay, list }: EachProps) => {
+    const [text, setText] = useState(preChar);
+    const tweener = useMemo(() => {
+      return new Tweener({});
+    }, []);
 
-  useEffect(() => {
-    tweener.add({
-      from: { index: 0 },
-      to: { index: 1 },
-      duration: duration + index * gap,
-      delay,
-      onUpdate: (offset: any) => {
-        setText(offsetChar(char, offset.index, type));
-      },
-      onComplete: (offset: any) => {
-        setText(offsetChar(char, offset.index, type) || char);
-      },
-    });
-  }, [char]);
+    useEffect(() => {
+      tweener.add({
+        from: { index: 0 },
+        to: { index: 1 },
+        duration: duration + index * gap,
+        delay,
+        onUpdate: (offset: any) => {
+          setText(offsetChar(char, offset.index, type, list));
+        },
+        onComplete: (offset: any) => {
+          setText(offsetChar(char, offset.index, type, list) || char);
+        },
+      });
+    }, [char]);
 
-  useEffect(() => {
-    if (pause) tweener.stop();
-    else tweener.play();
-  }, [pause]);
+    useEffect(() => {
+      if (pause) tweener.stop();
+      else tweener.play();
+    }, [pause]);
 
-  return <>{text}</>;
-});
+    return <>{text}</>;
+  },
+);
 
 const CharTransition = memo(
-  ({ children, duration = 1000, gap = 0, pause = false, preChar = '　', delay = 0 }: Props) => {
+  ({
+    children,
+    duration = 1000,
+    gap = 0,
+    pause = false,
+    preChar = '　',
+    delay = 0,
+    list = [],
+  }: Props) => {
     const [chars, setChars] = useState(children);
 
     useEffect(() => {
@@ -70,6 +82,7 @@ const CharTransition = memo(
               pause={pause}
               preChar={preChar}
               delay={delay}
+              list={list}
             />
           )),
         );

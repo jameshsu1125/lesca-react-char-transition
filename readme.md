@@ -27,7 +27,7 @@ As a Node module:
 import CharTransition from 'lesca-react-char-transition';
 ```
 
-In the compnenet
+In the component
 
 ```jsx
 const component = () => {
@@ -45,8 +45,9 @@ const component = () => {
 | :-------------------- | :------------------------------: | ------: |
 | **duration**:_number_ |       transition duration        |    1000 |
 | **gap**:_number_      |     each char transition gap     |       0 |
-| **preChar**:_string_  | first char display when it puase |      '' |
+| **preChar**:_string_  | first char display when it pause |      '' |
 | **pause**:_boolean_   |         pause transition         |   false |
+| **list**:_boolean_    |        list of char world        |   false |
 
 ### Features
 
