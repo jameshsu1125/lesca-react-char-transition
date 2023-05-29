@@ -7,6 +7,7 @@ type Props = {
     preChar?: string;
     delay?: number;
     list?: string[];
+    onEnd?: Function;
 };
-declare const CharTransition: import("react").MemoExoticComponent<({ children, duration, gap, pause, preChar, delay, list, }: Props) => import("react/jsx-runtime").JSX.Element>;
+declare const CharTransition: import("react").MemoExoticComponent<({ children, duration, gap, pause, preChar, delay, list, onEnd, }: Props) => import("react/jsx-runtime").JSX.Element>;
 export default CharTransition;

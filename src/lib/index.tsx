@@ -10,6 +10,7 @@ type Props = {
   preChar?: string;
   delay?: number;
   list?: string[];
+  onEnd?: Function;
 };
 
 type EachProps = {
@@ -22,10 +23,24 @@ type EachProps = {
   preChar: string;
   delay: number;
   list: string[];
+  onEnd: Function;
+  totalIndex: number;
 };
 
 const EachChars = memo(
-  ({ char, type, index, duration, gap, pause, preChar, delay, list }: EachProps) => {
+  ({
+    char,
+    type,
+    index,
+    duration,
+    gap,
+    pause,
+    preChar,
+    delay,
+    list,
+    totalIndex,
+    onEnd,
+  }: EachProps) => {
     const [text, setText] = useState(preChar);
     const tweener = useMemo(() => {
       return new Tweener({});
@@ -42,6 +57,7 @@ const EachChars = memo(
         },
         onComplete: (offset: any) => {
           setText(offsetChar(char, offset.index, type, list) || char);
+          if (totalIndex - 1 === index) onEnd?.();
         },
       });
     }, [char]);
@@ -64,6 +80,7 @@ const CharTransition = memo(
     preChar = '　',
     delay = 0,
     list = [],
+    onEnd = function () {},
   }: Props) => {
     const [chars, setChars] = useState(children);
 
@@ -76,6 +93,7 @@ const CharTransition = memo(
               char={e}
               key={`${e}${i}`}
               duration={duration}
+              totalIndex={children.length}
               type={type}
               index={i}
               gap={gap}
@@ -83,6 +101,7 @@ const CharTransition = memo(
               preChar={preChar}
               delay={delay}
               list={list}
+              onEnd={onEnd}
             />
           )),
         );

@@ -11,7 +11,15 @@ const Demo = () => {
       <h2>Demo</h2>
 
       <div className='c'>
-        <CharTransition preChar='-' gap={500} pause={appendString} list={['A', 'B']}>
+        <CharTransition
+          preChar='-'
+          onEnd={() => {
+            console.log('aaaaa');
+          }}
+          gap={500}
+          pause={appendString}
+          list={['A', 'B']}
+        >
           psychology
         </CharTransition>
       </div>

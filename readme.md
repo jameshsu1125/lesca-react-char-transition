@@ -48,6 +48,7 @@ const component = () => {
 | **preChar**:_string_  | first char display when it pause |      '' |
 | **pause**:_boolean_   |         pause transition         |   false |
 | **list**:_boolean_    |        list of char world        |   false |
+| **onEnd**:_boolean_   |       transition complete        |    null |
 
 ### Features
 
