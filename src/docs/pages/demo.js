@@ -18,7 +18,6 @@ const Demo = () => {
           }}
           gap={500}
           pause={appendString}
-          list={['A', 'B']}
         >
           psychology
         </CharTransition>
