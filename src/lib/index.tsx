@@ -1,4 +1,4 @@
-import Tweener from 'lesca-object-tweener';
+import Tweener, { Bezier } from 'lesca-object-tweener';
 import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
 import { Type, isNumber, offsetChar } from './mise';
 
@@ -11,6 +11,7 @@ type Props = {
   delay?: number;
   list?: string[];
   onEnd?: Function;
+  easing?: number[];
 };
 
 type EachProps = {
@@ -25,6 +26,7 @@ type EachProps = {
   list: string[];
   onEnd: Function;
   totalIndex: number;
+  easing: number[];
 };
 
 const EachChars = memo(
@@ -40,6 +42,7 @@ const EachChars = memo(
     list,
     totalIndex,
     onEnd,
+    easing,
   }: EachProps) => {
     const [text, setText] = useState(preChar);
     const tweener = useMemo(() => {
@@ -52,6 +55,7 @@ const EachChars = memo(
         to: { index: 1 },
         duration: duration + index * gap,
         delay,
+        easing,
         onUpdate: (offset: any) => {
           setText(offsetChar(char, offset.index, type, list));
         },
@@ -80,6 +84,7 @@ const CharTransition = memo(
     preChar = '　',
     delay = 0,
     list = [],
+    easing = Bezier.easeOutQuart,
     onEnd = function () {},
   }: Props) => {
     const [chars, setChars] = useState(children);
@@ -102,6 +107,7 @@ const CharTransition = memo(
               delay={delay}
               list={list}
               onEnd={onEnd}
+              easing={easing}
             />
           )),
         );
