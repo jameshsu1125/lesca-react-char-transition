@@ -1,11 +1,11 @@
 import Tweener, { Bezier } from 'lesca-object-tweener';
 import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
 import { Type, isNumber, offsetChar } from './mise';
+import BezierEasing from 'bezier-easing';
 
 type Props = {
   children: ReactNode | string;
   duration?: number;
-  gap?: number;
   pause?: boolean;
   preChar?: string;
   delay?: number;
@@ -19,31 +19,16 @@ type EachProps = {
   type: Type;
   index: number;
   duration: number;
-  gap: number;
   pause: boolean;
   preChar: string;
   delay: number;
   list: string[];
   onEnd: Function;
   totalIndex: number;
-  easing: number[];
 };
 
 const EachChars = memo(
-  ({
-    char,
-    type,
-    index,
-    duration,
-    gap,
-    pause,
-    preChar,
-    delay,
-    list,
-    totalIndex,
-    onEnd,
-    easing,
-  }: EachProps) => {
+  ({ char, type, index, duration, pause, preChar, delay, list, totalIndex, onEnd }: EachProps) => {
     const [text, setText] = useState(preChar);
     const tweener = useMemo(() => {
       return new Tweener({});
@@ -53,9 +38,8 @@ const EachChars = memo(
       tweener.add({
         from: { index: 0 },
         to: { index: 1 },
-        duration: duration + index * gap,
+        duration: duration,
         delay,
-        easing,
         onUpdate: (offset: any) => {
           setText(offsetChar(char, offset.index, type, list));
         },
@@ -79,15 +63,18 @@ const CharTransition = memo(
   ({
     children,
     duration = 1000,
-    gap = 0,
     pause = false,
     preChar = '　',
     delay = 0,
     list = [],
-    easing = Bezier.easeOutQuart,
+    easing = Bezier.linear,
     onEnd = function () {},
   }: Props) => {
     const [chars, setChars] = useState(children);
+
+    const easingMethod = useMemo(() => {
+      return BezierEasing(easing[0], easing[1], easing[2], easing[3]);
+    }, [easing, duration]);
 
     useEffect(() => {
       if (typeof children === 'string') {
@@ -97,17 +84,15 @@ const CharTransition = memo(
             <EachChars
               char={e}
               key={`${e}${i}`}
-              duration={duration}
+              duration={easingMethod(i / children.length) * duration}
               totalIndex={children.length}
               type={type}
               index={i}
-              gap={gap}
               pause={pause}
               preChar={preChar}
               delay={delay}
               list={list}
               onEnd={onEnd}
-              easing={easing}
             />
           )),
         );

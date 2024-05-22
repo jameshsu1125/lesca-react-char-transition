@@ -1,6 +1,7 @@
 import { Button, ButtonGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
 import CharTransition from '../../lib';
+import { Bezier } from 'lesca-object-tweener';
 
 const Demo = () => {
   useEffect(() => {}, []);
@@ -24,8 +25,13 @@ const Demo = () => {
       </div>
 
       <div className='c'>
-        <CharTransition gap={500} preChar='?' pause={appendNumber}>
-          1938402
+        <CharTransition
+          duration={5000}
+          preChar='?'
+          pause={appendNumber}
+          easing={Bezier.easeInOutQuart}
+        >
+          19384021938402193840219384021938402
         </CharTransition>
       </div>
 
