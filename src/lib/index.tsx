@@ -1,5 +1,5 @@
 import Tweener, { Bezier } from 'lesca-object-tweener';
-import { ReactNode, memo, useEffect, useMemo, useState } from 'react';
+import { ReactNode, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Type, isNumber, offsetChar } from './mise';
 import BezierEasing from 'bezier-easing';
 
@@ -12,6 +12,8 @@ type Props = {
   list?: string[];
   onEnd?: Function;
   easing?: number[];
+  fps?: number;
+  opacity?: number;
 };
 
 type EachProps = {
@@ -25,11 +27,28 @@ type EachProps = {
   list: string[];
   onEnd: Function;
   totalIndex: number;
+  fps: number;
+  opacity?: number;
 };
 
 const EachChars = memo(
-  ({ char, type, index, duration, pause, preChar, delay, list, totalIndex, onEnd }: EachProps) => {
+  ({
+    char,
+    type,
+    index,
+    duration,
+    pause,
+    preChar,
+    delay,
+    list,
+    totalIndex,
+    onEnd,
+    fps,
+    opacity,
+  }: EachProps) => {
     const [text, setText] = useState(preChar);
+    const ref = useRef({ index: 0, frame: 0, start: 0 });
+    const spanRef = useRef<HTMLSpanElement>(null);
     const tweener = useMemo(() => {
       return new Tweener({});
     }, []);
@@ -40,11 +59,21 @@ const EachChars = memo(
         to: { index: 1 },
         duration: duration,
         delay,
+        onStart: () => {
+          ref.current.start = new Date().getTime();
+          if (spanRef.current) spanRef.current!.style.opacity = String(opacity);
+        },
         onUpdate: (offset: any) => {
+          const offsetTime = new Date().getTime() - ref.current.start;
+          const offsetFrame = Math.floor((offsetTime / 1000) * fps);
+
+          if (ref.current.frame === offsetFrame) return;
+          ref.current.frame = offsetFrame;
           setText(offsetChar(char, offset.index, type, list));
         },
         onComplete: (offset: any) => {
           setText(offsetChar(char, offset.index, type, list) || char);
+          if (spanRef.current) spanRef.current!.style.opacity = '1';
           if (totalIndex - 1 === index) onEnd?.();
         },
       });
@@ -55,7 +84,7 @@ const EachChars = memo(
       else tweener.play();
     }, [pause]);
 
-    return <>{text}</>;
+    return <span ref={spanRef}>{text}</span>;
   },
 );
 
@@ -68,6 +97,8 @@ const CharTransition = memo(
     delay = 0,
     list = [],
     easing = Bezier.linear,
+    fps = 60,
+    opacity = 1,
     onEnd = function () {},
   }: Props) => {
     const [chars, setChars] = useState(children);
@@ -93,6 +124,8 @@ const CharTransition = memo(
               delay={delay}
               list={list}
               onEnd={onEnd}
+              fps={fps}
+              opacity={opacity}
             />
           )),
         );

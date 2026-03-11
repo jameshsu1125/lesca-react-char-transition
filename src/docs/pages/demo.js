@@ -18,6 +18,8 @@ const Demo = () => {
             console.log('aaaaa');
           }}
           gap={500}
+          fps={5}
+          opacity={0.5}
           pause={appendString}
         >
           psychology
@@ -28,6 +30,7 @@ const Demo = () => {
         <CharTransition
           duration={5000}
           preChar='?'
+          opacity={0.2}
           pause={appendNumber}
           easing={Bezier.easeInOutQuart}
         >
