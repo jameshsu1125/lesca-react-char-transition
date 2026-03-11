@@ -17,6 +17,7 @@ const Demo = () => {
           onEnd={() => {
             console.log('aaaaa');
           }}
+          delay={5000}
           gap={500}
           fps={5}
           opacity={0.5}

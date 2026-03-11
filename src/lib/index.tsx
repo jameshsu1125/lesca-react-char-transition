@@ -132,7 +132,7 @@ const CharTransition = memo(
       }
     }, [children, pause]);
 
-    return <> {chars}</>;
+    return <>{chars}</>;
   },
 );
 
