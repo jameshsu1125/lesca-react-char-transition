@@ -101,7 +101,7 @@ const CharTransition = memo(
     opacity = 1,
     onEnd = function () {},
   }: Props) => {
-    const [chars, setChars] = useState(children);
+    const [chars, setChars] = useState('' as ReactNode);
 
     const easingMethod = useMemo(() => {
       return BezierEasing(easing[0], easing[1], easing[2], easing[3]);
